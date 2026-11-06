@@ -581,3 +581,32 @@ picture{display:contents}
   .icard{padding:18px}
   .fab{width:52px;height:52px;right:14px;bottom:14px}
 }
+
+/* ==========================================================
+   Мобильное меню: панель в правом верхнем углу + компактный cookie
+   ========================================================== */
+@media(max-width:940px){
+  .nav{inset:auto;top:76px;right:14px;left:auto;width:min(320px,calc(100vw - 28px));max-height:calc(100dvh - 96px);overflow:auto;
+    align-items:stretch;justify-content:flex-start;gap:2px;padding:10px;border-radius:22px;
+    background:var(--graphite);border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 0 0 100vmax rgba(10,10,12,.6),0 24px 60px rgba(0,0,0,.5);
+    transform:translateY(-8px) scale(.97);transform-origin:top right}
+  .nav.open{transform:none}
+  .nav a:not(.btn){display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:14px;
+    font-family:var(--head);font-size:1.02rem;font-weight:700;color:#fff}
+  .nav a:not(.btn)::after{content:"›";position:static;width:auto;height:auto;background:none;transform:none;color:var(--muted-d);font-size:1.3rem;line-height:1;transition:transform .2s,color .2s}
+  .nav a:not(.btn):hover,.nav a.active:not(.btn){background:rgba(255,255,255,.07)}
+  .nav a.active:not(.btn)::after,.nav a:not(.btn):hover::after{transform:translateX(3px);color:var(--y)}
+  .nav .city-btn{margin:8px 0 4px;justify-content:center;padding:13px 16px;border-radius:14px;width:100%}
+  .nav-cta{margin:4px 0 0;width:100%;justify-content:center;text-align:center}
+  .burger{background:rgba(255,255,255,.12)}
+}
+
+@media(max-width:640px){
+  .cookie{left:10px;right:10px;bottom:10px;width:auto;padding:14px 16px;gap:2px 12px;border-radius:18px;grid-template-columns:auto 1fr}
+  .cookie-ic{font-size:1.9rem}
+  .cookie b{font-size:.95rem}
+  .cookie p{font-size:.78rem;line-height:1.4;margin:2px 0 4px}
+  .cookie-btns{flex-wrap:nowrap;gap:8px;margin-top:4px}
+  .cookie-btns .btn{flex:1;padding:10px 8px;font-size:.8rem;white-space:nowrap;justify-content:center}
+}

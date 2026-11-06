@@ -56,6 +56,12 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') setMenu(false);
     });
+    /* клик мимо панели и по кнопке выбора города закрывает меню */
+    document.addEventListener('click', function (e) {
+      if (burger.getAttribute('aria-expanded') !== 'true') return;
+      if (e.target.closest('#nav, #burger') && !e.target.closest('.city-btn')) return;
+      setMenu(false);
+    });
   }
 
   /* ---------- тумблер «English: ON» ---------- */
