@@ -82,7 +82,7 @@
     /* клик мимо панели и по кнопке выбора города закрывает меню */
     document.addEventListener('click', function (e) {
       if (burger.getAttribute('aria-expanded') !== 'true') return;
-      if (e.target.closest('#nav, #burger') && !e.target.closest('.city-btn')) return;
+      if (e.target.closest('#nav, #burger')) return;
       setMenu(false);
     });
   }
@@ -340,30 +340,8 @@
     });
   });
 
-  /* ---------- выбор города ---------- */
-  var cityDlg = $('#cityDlg');
-  var cityBtn = $('#cityBtn');
-  if (cityDlg && typeof cityDlg.showModal === 'function') {
-    if (cityBtn) cityBtn.addEventListener('click', function () { cityDlg.showModal(); });
-    $$('[data-city]', cityDlg).forEach(function (el) {
-      el.addEventListener('click', function () {
-        store.set('so_city', el.getAttribute('data-city'));
-        cityDlg.close();
-      });
-    });
-    cityDlg.addEventListener('click', function (e) { if (e.target === cityDlg) cityDlg.close(); });
-    cityDlg.addEventListener('close', function () {
-      store.set('so_city_seen', '1');
-      setTimeout(showCookie, 300);
-    });
-    if (!store.get('so_city_seen')) {
-      setTimeout(function () { if (!cityDlg.open) cityDlg.showModal(); }, 700);
-    } else {
-      setTimeout(showCookie, 900);
-    }
-  } else {
-    setTimeout(showCookie, 900);
-  }
+  /* плашка cookie */
+  setTimeout(showCookie, 900);
 
   /* ---------- форма → WhatsApp ---------- */
   var form = $('#lead');
