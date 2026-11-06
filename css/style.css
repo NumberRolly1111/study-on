@@ -262,13 +262,12 @@ h1,h2,h3{font-family:var(--head);line-height:1.1;letter-spacing:-.02em;font-weig
 .faq-wrap{max-width:860px}
 .faq{display:grid;gap:12px}
 .faq details{background:#fff;border:1px solid var(--line);border-radius:var(--r-s);transition:border-color .2s,box-shadow .2s}
-.faq details[open]{border-color:var(--y);box-shadow:var(--shadow)}
+.faq details.is-open{border-color:var(--y);box-shadow:var(--shadow)}
 .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 24px;font-family:var(--head);font-weight:700;font-size:1.04rem}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"+";flex:none;width:34px;height:34px;border-radius:50%;background:var(--y-soft);display:grid;place-items:center;font-size:1.3rem;font-weight:700;transition:transform .3s var(--ease),background .3s}
-.faq details[open] summary::after{transform:rotate(45deg);background:var(--y)}
-.faq details p{padding:0 24px 22px;color:var(--muted);max-width:64ch;animation:fade .4s var(--ease)}
-@keyframes fade{from{opacity:0;transform:translateY(-6px)}}
+.faq details.is-open summary::after{transform:rotate(45deg);background:var(--y)}
+.faq details p{padding:0 24px 22px;color:var(--muted);max-width:64ch}
 
 /* ---------- contact ---------- */
 .c-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}

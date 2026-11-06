@@ -214,6 +214,50 @@
     lb.addEventListener('click', function (e) { if (e.target === lb) lb.close(); });
   }
 
+  /* ---------- FAQ: плавное раскрытие ---------- */
+  var EASE = 'cubic-bezier(.2,.7,.2,1)';
+  $$('.faq details').forEach(function (d) {
+    var sum = $('summary', d);
+    var body = $('p', d);
+    var anim = null;
+    var closing = false;
+    d.classList.toggle('is-open', d.open);
+
+    sum.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (reduce) {
+        d.open = !d.open;
+        d.classList.toggle('is-open', d.open);
+        return;
+      }
+      var start = d.offsetHeight;
+      var willOpen = closing || !d.open;
+      if (anim) { anim.onfinish = null; anim.cancel(); }
+
+      var end;
+      if (willOpen) {
+        d.open = true;
+        end = d.offsetHeight;
+        body.animate(
+          { opacity: [0, 1], transform: ['translateY(-8px)', 'translateY(0)'] },
+          { duration: 420, easing: EASE, delay: 60, fill: 'backwards' }
+        );
+      } else {
+        end = sum.offsetHeight + (d.offsetHeight - d.clientHeight);
+      }
+      closing = !willOpen;
+      d.classList.toggle('is-open', willOpen);
+      d.style.overflow = 'hidden';
+      anim = d.animate({ height: [start + 'px', end + 'px'] }, { duration: 380, easing: EASE });
+      anim.onfinish = function () {
+        d.open = willOpen;
+        d.style.overflow = '';
+        anim = null;
+        closing = false;
+      };
+    });
+  });
+
   /* ---------- форма → WhatsApp ---------- */
   var form = $('#lead');
   var err = $('#formErr');
