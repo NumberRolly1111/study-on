@@ -632,3 +632,26 @@ picture{display:contents}
 .loader.on .ls-on{opacity:1;transform:none}
 @keyframes loaderIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 @keyframes loaderFail{to{opacity:0;visibility:hidden}}
+
+/* телефон: плашки на фото меньше и не налезают друг на друга */
+@media(max-width:640px){
+  .hero-visual{padding:0 0 22px 18px}
+  .chip{animation:none;padding:8px 12px;border-radius:14px;gap:9px;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+  .chip small{font-size:.68rem;line-height:1.25}
+  .chip-rating{top:12px;bottom:auto;left:30px}
+  .chip-rating b{font-size:1.2rem}
+  .chip-rating .stars{font-size:.7rem;letter-spacing:1px}
+  .chip-book{right:6px;bottom:0}
+  .mini-book{transform:scale(.8);transform-origin:left center;margin-right:-8px}
+}
+
+/* заставка закрывает всё, включая полосы под панелями iOS Safari */
+html.has-loader{background:var(--ink);overflow:hidden}
+.has-loader .loader{top:0;left:0;right:0;bottom:0;width:100%;height:100vh;height:100lvh;
+  box-shadow:0 240px 0 0 var(--ink),0 -240px 0 0 var(--ink)}
+
+/* телефон: одна компактная плашка рейтинга внизу слева, без налезаний на вывеску */
+@media(max-width:640px){
+  .chip-book{display:none}
+  .chip-rating{top:auto;bottom:36px;left:30px}
+}
