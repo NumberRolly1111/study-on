@@ -17,7 +17,9 @@
   /* ---------- кнопки WhatsApp ---------- */
   $$('[data-wa]').forEach(function (a) {
     var topic = a.getAttribute('data-topic');
-    var msg = 'Здравствуйте! Хочу узнать про обучение английскому в Study On' + (topic ? ' (' + topic + ')' : '') + '.';
+    var msg = topic
+      ? 'Здравствуйте! Хочу узнать про Study On: ' + topic + '.'
+      : 'Здравствуйте! Хочу записаться на бесплатный пробный урок в Study On.';
     a.href = waLink(msg);
     a.target = '_blank';
     a.rel = 'noopener';
@@ -85,13 +87,14 @@
   function runCounter(el) {
     var end = parseFloat(el.getAttribute('data-count'));
     var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
-    if (reduce) { el.textContent = end.toFixed(dec); return; }
+    var suf = el.getAttribute('data-suffix') || '';
+    if (reduce) { el.textContent = end.toFixed(dec) + suf; return; }
     var start = null, dur = 1400;
     function tick(t) {
       if (start === null) start = t;
       var p = Math.min((t - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = (end * eased).toFixed(dec);
+      el.textContent = (end * eased).toFixed(dec) + suf;
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -274,7 +277,7 @@
       (okName ? form.phone : form.name).focus();
       return;
     }
-    var text = 'Здравствуйте! Меня зовут ' + name + '. Хочу записаться на консультацию в Study On.\n' +
+    var text = 'Здравствуйте! Меня зовут ' + name + '. Хочу записаться на бесплатный пробный урок в Study On.\n' +
       'Мой уровень: ' + form.level.value + '.\nТелефон: ' + phone;
     window.open(waLink(text), '_blank', 'noopener');
   });
