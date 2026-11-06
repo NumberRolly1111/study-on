@@ -38,6 +38,16 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  /* ---------- быстрая заставка: логотип переключается OFF → ON ---------- */
+  (function () {
+    var ld = document.getElementById('loader');
+    if (!ld || !document.documentElement.classList.contains('has-loader')) return;
+    try { sessionStorage.setItem('so_loaded', '1'); } catch (e) {}
+    setTimeout(function () { ld.classList.add('on'); }, 280);
+    setTimeout(function () { ld.classList.add('done'); }, 700);
+    setTimeout(function () { if (ld.parentNode) ld.parentNode.removeChild(ld); document.documentElement.classList.remove('has-loader'); }, 1000);
+  })();
+
   /* ---------- мобильное меню ---------- */
   var burger = $('#burger');
   var nav = $('#nav');

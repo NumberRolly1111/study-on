@@ -610,3 +610,20 @@ picture{display:contents}
   .cookie-btns{flex-wrap:nowrap;gap:8px;margin-top:4px}
   .cookie-btns .btn{flex:1;padding:10px 8px;font-size:.8rem;white-space:nowrap;justify-content:center}
 }
+
+/* ==========================================================
+   Быстрая загрузочная заставка: переключатель OFF → ON
+   ========================================================== */
+.loader{display:none}
+.has-loader .loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--ink);
+  transition:opacity .25s ease,visibility .25s;animation:loaderFail .01s 2.2s forwards}
+.has-loader .loader.done{opacity:0;visibility:hidden}
+.loader-logo{font-size:clamp(2.1rem,9vw,3.4rem);animation:loaderIn .3s var(--ease) both}
+.loader-logo .sw{border-color:#5d6068;transition:border-color .25s}
+.loader-logo .sw i{right:calc(100% - .56em);background:#5d6068;transition:right .3s var(--ease),background .25s}
+.loader.on .loader-logo .sw{border-color:var(--y)}
+.loader.on .loader-logo .sw i{right:.1em;background:var(--y)}
+.loader-logo:hover .sw i{right:calc(100% - .56em)}
+.loader.on .loader-logo:hover .sw i{right:.1em}
+@keyframes loaderIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes loaderFail{to{opacity:0;visibility:hidden}}
