@@ -142,79 +142,154 @@
     counters.forEach(function (c) { co.observe(c); });
   }
 
-  /* ---------- мини-тест уровня ---------- */
+  /* ---------- тест уровня: A1 → C1, чем дальше, тем сложнее ---------- */
   if ($('#quiz')) {
-    var QUESTIONS = [
-      { q: 'She ___ a student.', o: ['am', 'is', 'are'], a: 1 },
-      { q: 'I ___ coffee every morning.', o: ['drink', 'drinks', 'drinking'], a: 0 },
-      { q: 'There ___ two books on the table.', o: ['is', 'are', 'be'], a: 1 },
-      { q: 'Yesterday we ___ to the cinema.', o: ['go', 'gone', 'went'], a: 2 },
-      { q: 'I ___ in Astana since 2020.', o: ['live', 'have lived', 'am living'], a: 1 },
-      { q: 'If it rains tomorrow, we ___ at home.', o: ['stay', 'will stay', 'would stay'], a: 1 },
-      { q: 'He asked me where ___.', o: ['I lived', 'did I live', 'do I live'], a: 0 },
-      { q: 'This is the ___ film I have ever seen.', o: ['more good', 'better', 'best'], a: 2 },
-      { q: 'I wish I ___ more free time.', o: ['have', 'had', 'would have'], a: 1 },
-      { q: 'By the time we arrived, the movie ___.', o: ['already started', 'had already started', 'has already started'], a: 1 }
+    /* формат: [вопрос, правильный ответ, неверные варианты] */
+    var TIERS = [
+      { id: 'A1', name: 'Beginner', qs: [
+        ['She ___ a student.', 'is', ['am', 'are', 'be']],
+        ['___ you like coffee?', 'Do', ['Does', 'Are', 'Is']],
+        ['There ___ two books on the table.', 'are', ['is', 'be', 'am']],
+        ['My brother ___ in a bank.', 'works', ['work', 'working', 'is work']],
+        ['This is my sister. ___ name is Aigerim.', 'Her', ['She', 'Hers', 'He']]
+      ] },
+      { id: 'A2', name: 'Elementary', qs: [
+        ['Yesterday we ___ to the cinema.', 'went', ['go', 'gone', 'going']],
+        ['Look! It ___ outside.', 'is raining', ['rains', 'rained', 'rain']],
+        ['He is ___ than his brother.', 'taller', ['tall', 'the tallest', 'more tall']],
+        ['You ___ smoke here. It is forbidden.', "mustn't", ["don't have to", "needn't", 'may']],
+        ["I haven't seen him ___ Monday.", 'since', ['for', 'from', 'during']]
+      ] },
+      { id: 'B1', name: 'Intermediate', qs: [
+        ['If it rains tomorrow, we ___ at home.', 'will stay', ['stay', 'would stay', 'stayed']],
+        ['I ___ in Astana since 2020.', 'have lived', ['live', 'am living', 'lived']],
+        ["I'm not used to ___ up so early.", 'getting', ['get', 'got', 'gets']],
+        ['The book ___ by millions of people.', 'has been read', ['has read', 'is reading', 'was reading']],
+        ['You look tired. You ___ get more sleep.', 'should', ['must to', 'can to', 'would']],
+        ['She said she ___ come to the party.', "wouldn't", ["won't", "doesn't", 'not']]
+      ] },
+      { id: 'B2', name: 'Upper-Intermediate', qs: [
+        ['If I ___ more free time, I would learn to play the guitar.', 'had', ['have', 'would have', 'will have']],
+        ['By the time we arrived, the movie ___.', 'had already started', ['already started', 'has already started', 'was already starting']],
+        ["I'd rather you ___ smoke in here.", "didn't", ["don't", "won't", "wouldn't"]],
+        ['He denied ___ the window.', 'breaking', ['to break', 'break', 'to have broke']],
+        ['Not only ___ late, but he also forgot the documents.', 'did he come', ['he came', 'he did come', 'came he']],
+        ['I wish I ___ that email yesterday.', "hadn't sent", ["didn't send", "wouldn't send", "haven't sent"]]
+      ] },
+      { id: 'C1', name: 'Advanced', qs: [
+        ['Had I known about the delay, I ___ earlier.', 'would have left', ['would leave', 'will have left', 'had left']],
+        ['The committee insisted that he ___ the report by Friday.', 'submit', ['submits', 'submitted', 'is submitting']],
+        ['She is said ___ the best lawyer in the city.', 'to be', ['being', 'to have being', 'that is']],
+        ['Hardly ___ the room when the phone rang.', 'had he entered', ['he had entered', 'he entered', 'did he enter']],
+        ['It never ___ my mind that he might be lying.', 'crossed', ['came', 'went', 'passed']],
+        ['The company decided to ___ its workforce to cut costs.', 'downsize', ['downgrade', 'downplay', 'downfall']]
+      ] }
     ];
-    var LEVELS = [
-      { max: 3, badge: 'A1', name: 'Начальный уровень (Beginner)', text: 'Лучше начать с Level 1 · Beginner: освоите базовую лексику и первые фразы для разговора.', book: 'Level 1 Beginner' },
-      { max: 5, badge: 'A2', name: 'Базовый уровень (Elementary)', text: 'Вам подойдёт Level 2 · Elementary: расширим словарь и научимся поддерживать простой диалог.', book: 'Level 2 Elementary' },
-      { max: 7, badge: 'B1', name: 'Средний уровень (Intermediate)', text: 'У вас уверенная база. Подберём группу для продолжающих, чтобы говорить свободнее.', book: 'Intermediate' },
-      { max: 10, badge: 'B2', name: 'Выше среднего (Upper-Intermediate)', text: 'Отличный результат! Подберём группу, где будет много практики речи на высоком уровне.', book: 'Upper-Intermediate' }
-    ];
+    var PASS = 0.7; /* порог уровня: 70% верных (4 из 5, 5 из 6) */
+    var LEVELS = {
+      A0: { badge: 'A0', name: 'Начинающий (Beginner с нуля)', text: 'Базовые конструкции пока даются с трудом, и это нормально. Лучше начать с Level 1 · Beginner: освоите первые фразы и основу для разговора.', book: 'Level 1 Beginner (с нуля)' },
+      A1: { badge: 'A1', name: 'Beginner', text: 'База есть, но простые времена и конструкции нужно закрепить. Вам подойдёт Level 1 · Beginner.', book: 'Level 1 Beginner' },
+      A2: { badge: 'A2', name: 'Elementary', text: 'Вы справляетесь с простыми ситуациями. Вам подойдёт Level 2 · Elementary: расширим словарь и научимся поддерживать диалог.', book: 'Level 2 Elementary' },
+      B1: { badge: 'B1', name: 'Intermediate', text: 'Уверенная база: вы можете объясниться в большинстве ситуаций. Подберём группу для продолжающих, чтобы говорить свободнее.', book: 'Intermediate' },
+      B2: { badge: 'B2', name: 'Upper-Intermediate', text: 'Сильный уровень. Подберём группу или Speaking Club, где будет много практики речи на высоком уровне.', book: 'Upper-Intermediate' },
+      C1: { badge: 'C1', name: 'Advanced', text: 'Очень высокий уровень, вы уверенно владеете сложной грамматикой. Подойдёт Speaking Club с носителями и разговорная практика.', book: 'Advanced / Speaking Club' }
+    };
 
-    var qi = 0, score = 0, locked = false;
+    var shuffle = function (arr) {
+      for (var i = arr.length - 1; i > 0; i--) {
+        var k = Math.floor(Math.random() * (i + 1));
+        var t = arr[i]; arr[i] = arr[k]; arr[k] = t;
+      }
+      return arr;
+    };
+
+    var ti = 0, qi = 0, tierScore = 0, asked = 0, locked = false, results = [], cur = null;
+    var total = TIERS.reduce(function (n, t) { return n + t.qs.length; }, 0);
     var elStep = $('#qStep'), elBar = $('#qBar'), elTitle = $('#qTitle'), elOpts = $('#qOpts');
     var elRes = $('#qResult'), top = $('.quiz-top');
 
-    var renderQ = function () {
-      var item = QUESTIONS[qi];
-      locked = false;
-      elStep.textContent = 'Вопрос ' + (qi + 1) + ' из ' + QUESTIONS.length;
-      elBar.style.width = (qi / QUESTIONS.length * 100) + '%';
-      elTitle.textContent = item.q;
-      elOpts.innerHTML = '';
-      item.o.forEach(function (text, i) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'opt';
-        var k = document.createElement('span');
-        k.className = 'k';
-        k.textContent = String.fromCharCode(65 + i);
-        b.appendChild(k);
-        b.appendChild(document.createTextNode(text));
-        b.addEventListener('click', function () { pick(i, b); });
-        elOpts.appendChild(b);
-      });
+    var need = function (tier) { return Math.ceil(tier.qs.length * PASS - 0.001); };
+
+    var addOpt = function (text, key, cls, handler) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt' + (cls ? ' ' + cls : '');
+      var k = document.createElement('span');
+      k.className = 'k';
+      k.textContent = key;
+      b.appendChild(k);
+      b.appendChild(document.createTextNode(text));
+      b.addEventListener('click', handler);
+      elOpts.appendChild(b);
     };
 
-    var pick = function (i, btn) {
+    var renderQ = function () {
+      var tier = TIERS[ti], item = tier.qs[qi];
+      locked = false;
+      cur = { ok: item[1] };
+      elStep.textContent = 'Вопрос ' + (asked + 1) + ' · уровень ' + tier.id;
+      elBar.style.width = (asked / total * 100) + '%';
+      elTitle.textContent = item[0];
+      elOpts.innerHTML = '';
+      shuffle([item[1]].concat(item[2])).forEach(function (text, i) {
+        var btn;
+        addOpt(text, String.fromCharCode(65 + i), '', function (e) { pick(text === cur.ok, e.currentTarget); });
+      });
+      addOpt('Не знаю', '?', 'idk', function (e) { pick(false, e.currentTarget); });
+    };
+
+    var pick = function (correct, btn) {
       if (locked) return;
       locked = true;
       btn.classList.add('picked');
-      if (i === QUESTIONS[qi].a) score++;
+      if (correct) tierScore++;
+      asked++;
       setTimeout(function () {
         qi++;
-        if (qi < QUESTIONS.length) renderQ(); else showResult();
+        var tier = TIERS[ti];
+        if (qi < tier.qs.length) { renderQ(); return; }
+        /* уровень закончился: проверяем, пройден ли он */
+        var passed = tierScore >= need(tier);
+        results.push({ id: tier.id, score: tierScore, of: tier.qs.length, passed: passed });
+        if (!passed || ti === TIERS.length - 1) { showResult(); return; }
+        ti++; qi = 0; tierScore = 0;
+        renderQ();
       }, reduce ? 0 : 320);
     };
 
     var showResult = function () {
-      var lvl = LEVELS.filter(function (l) { return score <= l.max; })[0] || LEVELS[LEVELS.length - 1];
+      var lastPassed = null;
+      results.forEach(function (r) { if (r.passed) lastPassed = r.id; });
+      var lvl = LEVELS[lastPassed || 'A0'];
+      var correctTotal = results.reduce(function (n, r) { return n + r.score; }, 0);
       top.hidden = true;
       elTitle.hidden = true;
       elOpts.hidden = true;
       elRes.hidden = false;
       $('#qBadge').textContent = lvl.badge;
       $('#qLevel').textContent = lvl.name;
-      $('#qText').textContent = 'Правильных ответов: ' + score + ' из ' + QUESTIONS.length + '. ' + lvl.text +
-        ' Результат ориентировочный, точный уровень определит преподаватель.';
-      $('#qWa').href = waLink('Здравствуйте! Прошёл(ла) мини-тест на сайте Study On: ' + score + ' из ' + QUESTIONS.length +
-        ', ориентировочный уровень: ' + lvl.book + '. Хочу записаться и уточнить группу.');
+      $('#qText').textContent = lvl.text + ' Результат ориентировочный, точный уровень определит преподаватель.';
+      var br = $('#qBreak');
+      if (br) {
+        br.innerHTML = '';
+        results.forEach(function (r) {
+          var row = document.createElement('div');
+          row.className = 'qb-row' + (r.passed ? ' ok' : ' no');
+          var l = document.createElement('b'); l.textContent = r.id;
+          var bar = document.createElement('i'); var fill = document.createElement('span');
+          fill.style.width = (r.score / r.of * 100) + '%'; bar.appendChild(fill);
+          var n = document.createElement('em'); n.textContent = r.score + ' из ' + r.of;
+          row.appendChild(l); row.appendChild(bar); row.appendChild(n);
+          br.appendChild(row);
+        });
+      }
+      var detail = results.map(function (r) { return r.id + ' ' + r.score + '/' + r.of; }).join(', ');
+      $('#qWa').href = waLink('Здравствуйте! Прошёл(ла) тест уровня на сайте Study On: ' + detail +
+        ', ориентировочный уровень ' + lvl.badge + ' (' + lvl.book + '). Хочу записаться и уточнить группу.');
     };
 
     $('#qRestart').addEventListener('click', function () {
-      qi = 0; score = 0;
+      ti = 0; qi = 0; tierScore = 0; asked = 0; results = [];
       elRes.hidden = true;
       top.hidden = false;
       elTitle.hidden = false;

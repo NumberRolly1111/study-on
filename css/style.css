@@ -699,3 +699,22 @@ html.has-loader{background:var(--ink);overflow:hidden}
 html.has-loader{animation:ldHtml .01s 6s forwards}
 @keyframes ldShow{to{visibility:visible}}
 @keyframes ldHtml{to{overflow:auto}}
+
+/* тест: «Не знаю», разбивка по уровням */
+.opt.idk{background:transparent;border:2px dashed var(--line);color:var(--muted);font-weight:600}
+.opt.idk .k{background:transparent;border:1.5px solid var(--line)}
+.opt.idk:hover{border-color:var(--muted);transform:none}
+.q-break{display:grid;gap:10px;max-width:420px;margin:0 auto 26px;text-align:left}
+.qb-row{display:grid;grid-template-columns:34px 1fr 64px;align-items:center;gap:12px;font-size:.9rem}
+.qb-row b{font-family:var(--head);font-weight:800}
+.qb-row i{display:block;height:8px;border-radius:8px;background:rgba(17,18,20,.1);overflow:hidden}
+.qb-row i span{display:block;height:100%;border-radius:8px;background:var(--y)}
+.qb-row.no i span{background:#c9ccd3}
+.qb-row em{font-style:normal;color:var(--muted);text-align:right}
+.qb-row.no b{color:var(--muted)}
+
+/* подпись «Создано» по центру внизу */
+.foot-made{width:min(1120px,calc(100% - 40px));margin:26px auto 0;padding-top:18px;border-top:1px solid var(--line-d);text-align:center;font-size:.86rem;color:var(--muted-d)}
+.foot-made span{font-family:var(--head);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.foot-made a{color:var(--y);font-weight:700}
+.foot-made a:hover{text-decoration:underline}
