@@ -1,0 +1,243 @@
+/* Study On — интерактив сайта */
+(function () {
+  'use strict';
+
+  var PHONE = '77008250388';
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function waLink(text) {
+    return 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text);
+  }
+
+  /* ---------- год в подвале ---------- */
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ---------- кнопки WhatsApp ---------- */
+  $$('[data-wa]').forEach(function (a) {
+    var topic = a.getAttribute('data-topic');
+    var msg = 'Здравствуйте! Хочу узнать про обучение английскому в Study On' + (topic ? ' (' + topic + ')' : '') + '.';
+    a.href = waLink(msg);
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+
+  /* ---------- шапка + прогресс прокрутки ---------- */
+  var header = $('#header');
+  var bar = $('.progress');
+  function onScroll() {
+    var y = window.scrollY || document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    header.classList.toggle('scrolled', y > 30);
+    bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(y / h, 1) : 0) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- мобильное меню ---------- */
+  var burger = $('#burger');
+  var nav = $('#nav');
+  function setMenu(open) {
+    nav.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burger.addEventListener('click', function () {
+    setMenu(burger.getAttribute('aria-expanded') !== 'true');
+  });
+  $$('a', nav).forEach(function (a) {
+    a.addEventListener('click', function () { setMenu(false); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setMenu(false);
+  });
+
+  /* ---------- тумблер «English: ON» ---------- */
+  var sw = $('#heroSwitch');
+  function setSwitch(on) { sw.setAttribute('aria-checked', on ? 'true' : 'false'); }
+  sw.addEventListener('click', function () {
+    setSwitch(sw.getAttribute('aria-checked') !== 'true');
+  });
+  setTimeout(function () { setSwitch(true); }, reduce ? 0 : 900);
+
+  /* ---------- появление блоков ---------- */
+  var reveals = $$('.reveal');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(function (el, i) {
+      el.style.setProperty('--d', ((i % 4) * 0.08) + 's');
+      io.observe(el);
+    });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- счётчики ---------- */
+  var counters = $$('[data-count]');
+  function runCounter(el) {
+    var end = parseFloat(el.getAttribute('data-count'));
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    if (reduce) { el.textContent = end.toFixed(dec); return; }
+    var start = null, dur = 1400;
+    function tick(t) {
+      if (start === null) start = t;
+      var p = Math.min((t - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (end * eased).toFixed(dec);
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if ('IntersectionObserver' in window) {
+    var co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { runCounter(en.target); co.unobserve(en.target); }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (c) { co.observe(c); });
+  }
+
+  /* ---------- мини-тест уровня ---------- */
+  var QUESTIONS = [
+    { q: 'She ___ a student.', o: ['am', 'is', 'are'], a: 1 },
+    { q: 'I ___ coffee every morning.', o: ['drink', 'drinks', 'drinking'], a: 0 },
+    { q: 'There ___ two books on the table.', o: ['is', 'are', 'be'], a: 1 },
+    { q: 'Yesterday we ___ to the cinema.', o: ['go', 'gone', 'went'], a: 2 },
+    { q: 'I ___ in Astana since 2020.', o: ['live', 'have lived', 'am living'], a: 1 },
+    { q: 'If it rains tomorrow, we ___ at home.', o: ['stay', 'will stay', 'would stay'], a: 1 },
+    { q: 'He asked me where ___.', o: ['I lived', 'did I live', 'do I live'], a: 0 },
+    { q: 'This is the ___ film I have ever seen.', o: ['more good', 'better', 'best'], a: 2 },
+    { q: 'I wish I ___ more free time.', o: ['have', 'had', 'would have'], a: 1 },
+    { q: 'By the time we arrived, the movie ___.', o: ['already started', 'had already started', 'has already started'], a: 1 }
+  ];
+  var LEVELS = [
+    { max: 3, badge: 'A1', name: 'Начальный уровень (Beginner)', text: 'Лучше начать с Level 1 · Beginner: освоите базовую лексику и первые фразы для разговора.', book: 'Level 1 Beginner' },
+    { max: 5, badge: 'A2', name: 'Базовый уровень (Elementary)', text: 'Вам подойдёт Level 2 · Elementary: расширим словарь и научимся поддерживать простой диалог.', book: 'Level 2 Elementary' },
+    { max: 7, badge: 'B1', name: 'Средний уровень (Intermediate)', text: 'У вас уверенная база. Подберём группу для продолжающих, чтобы говорить свободнее.', book: 'Intermediate' },
+    { max: 10, badge: 'B2', name: 'Выше среднего (Upper-Intermediate)', text: 'Отличный результат! Подберём группу, где будет много практики речи на высоком уровне.', book: 'Upper-Intermediate' }
+  ];
+
+  var qi = 0, score = 0, locked = false;
+  var elStep = $('#qStep'), elBar = $('#qBar'), elTitle = $('#qTitle'), elOpts = $('#qOpts');
+  var elRes = $('#qResult'), top = $('.quiz-top');
+
+  function renderQ() {
+    var item = QUESTIONS[qi];
+    locked = false;
+    elStep.textContent = 'Вопрос ' + (qi + 1) + ' из ' + QUESTIONS.length;
+    elBar.style.width = (qi / QUESTIONS.length * 100) + '%';
+    elTitle.textContent = item.q;
+    elOpts.innerHTML = '';
+    item.o.forEach(function (text, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      var k = document.createElement('span');
+      k.className = 'k';
+      k.textContent = String.fromCharCode(65 + i);
+      b.appendChild(k);
+      b.appendChild(document.createTextNode(text));
+      b.addEventListener('click', function () { pick(i, b); });
+      elOpts.appendChild(b);
+    });
+  }
+
+  function pick(i, btn) {
+    if (locked) return;
+    locked = true;
+    btn.classList.add('picked');
+    if (i === QUESTIONS[qi].a) score++;
+    setTimeout(function () {
+      qi++;
+      if (qi < QUESTIONS.length) renderQ(); else showResult();
+    }, reduce ? 0 : 320);
+  }
+
+  function showResult() {
+    var lvl = LEVELS.filter(function (l) { return score <= l.max; })[0] || LEVELS[LEVELS.length - 1];
+    top.hidden = true;
+    elTitle.hidden = true;
+    elOpts.hidden = true;
+    elRes.hidden = false;
+    $('#qBadge').textContent = lvl.badge;
+    $('#qLevel').textContent = lvl.name;
+    $('#qText').textContent = 'Правильных ответов: ' + score + ' из ' + QUESTIONS.length + '. ' + lvl.text +
+      ' Результат ориентировочный, точный уровень определит преподаватель.';
+    $('#qWa').href = waLink('Здравствуйте! Прошёл(ла) мини-тест на сайте Study On: ' + score + ' из ' + QUESTIONS.length +
+      ', ориентировочный уровень: ' + lvl.book + '. Хочу записаться и уточнить группу.');
+  }
+
+  $('#qRestart').addEventListener('click', function () {
+    qi = 0; score = 0;
+    elRes.hidden = true;
+    top.hidden = false;
+    elTitle.hidden = false;
+    elOpts.hidden = false;
+    renderQ();
+  });
+  renderQ();
+
+  /* ---------- слайдер отзывов ---------- */
+  var slider = $('#slider');
+  function slideBy(dir) {
+    var card = $('.rev', slider);
+    var step = card ? card.getBoundingClientRect().width + 20 : 300;
+    slider.scrollBy({ left: dir * step, behavior: reduce ? 'auto' : 'smooth' });
+  }
+  $('#rPrev').addEventListener('click', function () { slideBy(-1); });
+  $('#rNext').addEventListener('click', function () { slideBy(1); });
+  slider.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') slideBy(1);
+    if (e.key === 'ArrowLeft') slideBy(-1);
+  });
+
+  /* ---------- лайтбокс галереи ---------- */
+  var lb = $('#lb');
+  if (lb && typeof lb.showModal === 'function') {
+    $$('[data-lb]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        $('#lbImg').src = b.getAttribute('data-lb');
+        $('#lbImg').alt = b.getAttribute('data-cap') || '';
+        $('#lbCap').textContent = b.getAttribute('data-cap') || '';
+        lb.showModal();
+      });
+    });
+    $('#lbClose').addEventListener('click', function () { lb.close(); });
+    lb.addEventListener('click', function (e) { if (e.target === lb) lb.close(); });
+  }
+
+  /* ---------- форма → WhatsApp ---------- */
+  var form = $('#lead');
+  var err = $('#formErr');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.name.value.trim();
+    var phone = form.phone.value.trim();
+    var okName = name.length >= 2;
+    var okPhone = phone.replace(/\D/g, '').length >= 10;
+    form.name.classList.toggle('bad', !okName);
+    form.phone.classList.toggle('bad', !okPhone);
+    err.hidden = okName && okPhone;
+    if (!okName || !okPhone) {
+      (okName ? form.phone : form.name).focus();
+      return;
+    }
+    var text = 'Здравствуйте! Меня зовут ' + name + '. Хочу записаться на консультацию в Study On.\n' +
+      'Мой уровень: ' + form.level.value + '.\nТелефон: ' + phone;
+    window.open(waLink(text), '_blank', 'noopener');
+  });
+  ['input', 'change'].forEach(function (ev) {
+    form.addEventListener(ev, function (e) {
+      if (e.target.classList) e.target.classList.remove('bad');
+      err.hidden = true;
+    });
+  });
+})();
