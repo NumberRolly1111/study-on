@@ -556,3 +556,28 @@ picture{display:contents}
 .city-here:hover::after{color:var(--black)}
 @media(max-width:1100px){.cities{grid-template-columns:repeat(3,1fr)}.city-here{grid-column:1/-1;min-height:130px}}
 @media(max-width:600px){.cities{grid-template-columns:repeat(2,1fr)}.city{min-height:140px;padding:18px}.city small{top:18px;left:18px}}
+
+/* ==========================================================
+   Телефон: всё компактнее, заголовки не вылезают за экран
+   ========================================================== */
+@media(max-width:560px){
+  html{font-size:15px}
+  .wrap{padding-inline:18px}
+  .hero{padding:104px 0 64px}
+  .hero-grid{gap:36px}
+  .hero h1{font-size:clamp(1.65rem,8vw,2.1rem);line-height:1.08;margin-bottom:18px;overflow-wrap:break-word}
+  .hero h1 em{white-space:normal}
+  .hero-lead{font-size:1rem;margin-bottom:24px}
+  .hero .btn,.hero-cta .btn{width:100%;justify-content:center}
+  .btn-lg{padding:15px 22px;font-size:.98rem}
+  .sec{padding:56px 0}
+  .sec-head{margin-bottom:30px}
+  .sec-head h2,.practice-txt h2,.reel-txt h2,.find-txt h2,.trial h2,.club h2{font-size:clamp(1.55rem,7vw,1.9rem);line-height:1.15}
+  .page-head h1{font-size:clamp(1.8rem,8.4vw,2.2rem)}
+  .cta-band h2{font-size:1.4rem}
+  .story-num{font-size:clamp(3.6rem,22vw,5rem)}
+  .story-cap{font-size:1.3rem}
+  .stats b{font-size:2rem}
+  .icard{padding:18px}
+  .fab{width:52px;height:52px;right:14px;bottom:14px}
+}
