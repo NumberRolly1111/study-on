@@ -38,14 +38,27 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ---------- быстрая заставка: логотип переключается OFF → ON ---------- */
+  /* ---------- заставка: STUDY OFF → переключатель → STUDY ON ---------- */
   (function () {
     var ld = document.getElementById('loader');
     if (!ld || !document.documentElement.classList.contains('has-loader')) return;
     try { sessionStorage.setItem('so_loaded', '1'); } catch (e) {}
-    setTimeout(function () { ld.classList.add('on'); }, 280);
-    setTimeout(function () { ld.classList.add('done'); }, 700);
-    setTimeout(function () { if (ld.parentNode) ld.parentNode.removeChild(ld); document.documentElement.classList.remove('has-loader'); }, 1000);
+    var slot = ld.querySelector('.ls');
+    var off = ld.querySelector('.ls-off');
+    var on = ld.querySelector('.ls-on');
+    setTimeout(function () {
+      if (slot && off && on) {
+        slot.style.width = off.offsetWidth + 'px';
+        void slot.offsetWidth;
+        slot.style.width = on.offsetWidth + 'px';
+      }
+      ld.classList.add('on');
+    }, 900);
+    setTimeout(function () { ld.classList.add('done'); }, 2100);
+    setTimeout(function () {
+      if (ld.parentNode) ld.parentNode.removeChild(ld);
+      document.documentElement.classList.remove('has-loader');
+    }, 2600);
   })();
 
   /* ---------- мобильное меню ---------- */
