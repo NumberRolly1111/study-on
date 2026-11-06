@@ -612,26 +612,8 @@ picture{display:contents}
 }
 
 /* ==========================================================
-   Загрузочная заставка: STUDY OFF → переключатель → STUDY ON
+   Заставка: загрузка → STUDY OFF → переключатель → STUDY ON
    ========================================================== */
-.loader{display:none}
-.has-loader .loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--ink);
-  transition:opacity .4s ease,visibility .4s;animation:loaderFail .01s 4s forwards}
-.has-loader .loader.done{opacity:0;visibility:hidden}
-.loader-logo{font-size:clamp(2.3rem,10vw,4rem);animation:loaderIn .5s var(--ease) both}
-.loader-logo .sw{border-color:#5d6068;transition:border-color .5s ease}
-.loader-logo .sw i{right:calc(100% - .56em);background:#5d6068;transition:right .55s var(--ease),background .5s ease}
-.loader-logo:hover .sw i{right:calc(100% - .56em)}
-.loader.on .loader-logo .sw{border-color:var(--y)}
-.loader.on .loader-logo .sw i,.loader.on .loader-logo:hover .sw i{right:.1em;background:var(--y)}
-.ls{position:relative;display:inline-block;overflow:hidden;line-height:1.15;transition:width .55s var(--ease)}
-.ls b{display:block;font-weight:inherit;transition:opacity .45s ease,transform .55s var(--ease),color .4s}
-.ls-off{color:#8b8e96}
-.ls-on{position:absolute;left:0;top:0;opacity:0;transform:translateX(-110%);color:#fff}
-.loader.on .ls-off{opacity:0;transform:translateX(110%)}
-.loader.on .ls-on{opacity:1;transform:none}
-@keyframes loaderIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-@keyframes loaderFail{to{opacity:0;visibility:hidden}}
 
 /* телефон: плашки на фото меньше и не налезают друг на друга */
 @media(max-width:640px){
@@ -645,10 +627,6 @@ picture{display:contents}
   .mini-book{transform:scale(.8);transform-origin:left center;margin-right:-8px}
 }
 
-/* заставка закрывает всё, включая полосы под панелями iOS Safari */
-html.has-loader{background:var(--ink);overflow:hidden}
-.has-loader .loader{top:0;left:0;right:0;bottom:0;width:100%;height:100vh;height:100lvh;
-  box-shadow:0 240px 0 0 var(--ink),0 -240px 0 0 var(--ink)}
 
 /* телефон: одна компактная плашка рейтинга внизу слева, без налезаний на вывеску */
 @media(max-width:640px){
@@ -667,3 +645,57 @@ html.has-loader{background:var(--ink);overflow:hidden}
   .club-badge b br{display:none}
 }
 @media(max-width:900px){.club-badge{display:none}}
+
+/* ---- заставка: детальная анимация ---- */
+.loader{display:none}
+html.has-loader{background:var(--ink);overflow:hidden}
+/* пока идёт заставка, страница скрыта: под панелями iOS виден только тёмный фон */
+.has-loader body>*:not(.loader){visibility:hidden}
+.has-loader.ld-out body>*:not(.loader){visibility:visible}
+.has-loader .loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:var(--ink);overflow:hidden;
+  transition:opacity .6s ease,visibility .6s;animation:loaderFail .01s 6s forwards}
+.has-loader .loader.done{opacity:0;visibility:hidden}
+.ld-glow{position:absolute;left:50%;top:50%;width:min(130vw,760px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,180,0,.26),rgba(255,180,0,0) 70%);
+  opacity:0;transform:translate(-50%,-50%) scale(.4);transition:opacity .9s ease,transform 1.3s var(--ease)}
+.loader.on .ld-glow{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.ld-grid{position:absolute;inset:0;opacity:.55;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 2px,transparent 2px 46px);
+  -webkit-mask-image:radial-gradient(circle at center,#000,transparent 72%);mask-image:radial-gradient(circle at center,#000,transparent 72%)}
+.ld-center{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;padding:0 16px;transition:transform .8s var(--ease)}
+.loader.done .ld-center{transform:scale(1.07)}
+.loader-logo{font-size:clamp(2.3rem,10vw,4rem)}
+.ld-word{display:inline-flex}
+.ld-word i{font-style:normal;display:inline-block;opacity:0;transform:translateY(.55em);
+  animation:ldRise .6s var(--ease) forwards;animation-delay:calc(var(--i)*70ms + 100ms)}
+.loader-logo .sw{opacity:0;border-color:#5d6068;animation:ldFade .5s ease .5s forwards;transition:border-color .5s ease}
+.loader-logo .sw::before{content:"";position:absolute;inset:0;border-radius:inherit;background:rgba(255,180,0,.22);transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease)}
+.loader.on .loader-logo .sw::before{transform:none}
+.loader-logo .sw i{right:calc(100% - .56em);background:#5d6068;transition:right .75s cubic-bezier(.34,1.45,.5,1),background .45s ease}
+.loader-logo:hover .sw i{right:calc(100% - .56em)}
+.loader.on .loader-logo .sw{border-color:var(--y)}
+.loader.on .loader-logo .sw i,.loader.on .loader-logo:hover .sw i{right:.1em;background:var(--y)}
+.ld-ring{position:absolute;inset:-.17em;border-radius:999px;border:2px solid var(--y);opacity:0;pointer-events:none}
+.loader.on .ld-ring{animation:ldRing 1s ease-out .12s}
+.ls{position:relative;display:inline-block;overflow:hidden;line-height:1.15;opacity:0;animation:ldFade .5s ease .6s forwards;transition:width .65s var(--ease)}
+.ls b{display:block;font-weight:inherit;transition:opacity .5s ease,transform .65s var(--ease)}
+.ls-off{color:#8b8e96}
+.ls-on{position:absolute;left:0;top:0;opacity:0;transform:translateX(-110%);color:#fff}
+.loader.on .ls-off{opacity:0;transform:translateX(110%)}
+.loader.on .ls-on{opacity:1;transform:none}
+.ld-bar{width:min(240px,56vw);height:3px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden;opacity:0;animation:ldFade .4s ease .5s forwards}
+.ld-bar span{display:block;height:100%;border-radius:3px;background:var(--y);transform:scaleX(0);transform-origin:left;animation:ldBar 1.05s cubic-bezier(.6,.05,.3,1) .5s forwards}
+.loader.on .ld-bar{animation:ldOut .35s ease forwards}
+.ld-tag{margin:0;max-width:92vw;text-align:center;font-family:var(--head);font-weight:700;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-d);
+  opacity:0;transform:translateY(10px);transition:opacity .8s ease .3s,transform .8s var(--ease) .3s}
+.loader.on .ld-tag{opacity:1;transform:none}
+@keyframes ldRise{to{opacity:1;transform:none}}
+@keyframes ldFade{to{opacity:1}}
+@keyframes ldOut{from{opacity:1}to{opacity:0}}
+@keyframes ldBar{to{transform:scaleX(1)}}
+@keyframes ldRing{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(1.8,2.6)}}
+@keyframes loaderFail{to{opacity:0;visibility:hidden}}
+/* страховка: если скрипт не загрузился, через 6 секунд страница всё равно открывается */
+.has-loader body>*:not(.loader){animation:ldShow .01s 6s forwards}
+html.has-loader{animation:ldHtml .01s 6s forwards}
+@keyframes ldShow{to{visibility:visible}}
+@keyframes ldHtml{to{overflow:auto}}

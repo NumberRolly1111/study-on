@@ -53,12 +53,12 @@
         slot.style.width = on.offsetWidth + 'px';
       }
       ld.classList.add('on');
-    }, 900);
-    setTimeout(function () { ld.classList.add('done'); }, 2100);
+    }, 1700);
+    setTimeout(function () { document.documentElement.classList.add('ld-out'); ld.classList.add('done'); }, 3200);
     setTimeout(function () {
       if (ld.parentNode) ld.parentNode.removeChild(ld);
-      document.documentElement.classList.remove('has-loader');
-    }, 2600);
+      document.documentElement.classList.remove('has-loader', 'ld-out');
+    }, 3900);
   })();
 
   /* ---------- мобильное меню ---------- */
