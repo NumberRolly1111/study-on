@@ -516,3 +516,43 @@ picture{display:contents}
 
 /* пропорции фото без искажения из-за атрибута height */
 .find-photo img,.practice-photo img{height:auto}
+
+/* ==========================================================
+   Правки вида: заголовки, «Как нас найти», 1000+, города
+   ========================================================== */
+.sec-head{max-width:860px}
+.sec-head h2{max-width:none;text-wrap:balance}
+
+/* карточки «как нас найти»: ровная сетка 3×2, значок сверху */
+.info-cards{grid-template-columns:repeat(3,1fr);gap:20px}
+.icard{flex-direction:column;gap:16px;padding:28px}
+.icard p{color:var(--muted);font-size:.98rem;line-height:1.55}
+.icard h3{font-size:1.1rem;margin-bottom:6px}
+@media(max-width:960px){.info-cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.info-cards{grid-template-columns:1fr}.icard{flex-direction:row;padding:22px}}
+
+/* блок «1000+» */
+.story{text-align:left;background:
+  linear-gradient(100deg,rgba(17,18,20,.96) 0%,rgba(17,18,20,.88) 45%,rgba(17,18,20,.72) 100%),url("../assets/img/sign.jpg") center/cover;
+  background-color:var(--black);padding:clamp(64px,9vw,120px) 0}
+.story-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,6vw,88px);align-items:center}
+.story h2{max-width:none;margin:0;display:flex;flex-direction:column;gap:6px;font-size:inherit}
+.story-num{font-family:var(--head);font-weight:800;font-size:clamp(4.5rem,13vw,9.5rem);line-height:.95;letter-spacing:-.05em;color:var(--y)}
+.story-cap{font-family:var(--head);font-weight:800;font-size:clamp(1.5rem,3.2vw,2.4rem);line-height:1.2;letter-spacing:-.02em}
+.story-list{display:grid;gap:12px;margin:0 0 26px;padding:0;list-style:none}
+.story-list li{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:1.05rem;color:#f1f2f5}
+.story-list i{font-style:normal;flex:none;width:42px;height:42px;border-radius:12px;background:rgba(255,180,0,.18);display:grid;place-items:center;font-size:1.2rem}
+.story-end{margin:0 0 28px;max-width:none;font-size:1.05rem}
+@media(max-width:860px){.story-grid{grid-template-columns:1fr}}
+
+/* города */
+.cities{grid-template-columns:repeat(5,1fr);gap:16px}
+.city{position:relative;min-height:168px;justify-content:flex-end;padding:22px;gap:6px}
+.city::after{content:"↗";position:absolute;top:18px;right:20px;font-size:1.15rem;font-weight:700;color:var(--muted-d);transition:transform .3s var(--ease),color .3s}
+.city:hover::after{transform:translate(3px,-3px);color:var(--y)}
+.city small{position:absolute;top:22px;left:22px}
+.city b{font-size:1.6rem}
+.city-here::after{color:rgba(17,18,20,.55)}
+.city-here:hover::after{color:var(--black)}
+@media(max-width:1100px){.cities{grid-template-columns:repeat(3,1fr)}.city-here{grid-column:1/-1;min-height:130px}}
+@media(max-width:600px){.cities{grid-template-columns:repeat(2,1fr)}.city{min-height:140px;padding:18px}.city small{top:18px;left:18px}}
