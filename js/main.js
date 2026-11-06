@@ -270,6 +270,72 @@
     });
   });
 
+
+  /* ---------- хранилище (с защитой от блокировки) ---------- */
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+  };
+
+  /* ---------- карта: только после согласия ---------- */
+  var mapFrame = $('#mapFrame');
+  var mapPh = $('#mapPh');
+  function loadMap() {
+    if (!mapFrame || mapFrame.getAttribute('src')) return;
+    mapFrame.src = mapFrame.getAttribute('data-src');
+    mapFrame.hidden = false;
+    if (mapPh) mapPh.hidden = true;
+  }
+  if (mapPh && $('#mapLoad')) $('#mapLoad').addEventListener('click', loadMap);
+  if (store.get('so_consent') === 'all') loadMap();
+
+  /* ---------- плашка cookie ---------- */
+  var cookieBar = $('#cookie');
+  function showCookie() {
+    if (!cookieBar || store.get('so_consent') || !cookieBar.hidden) return;
+    cookieBar.hidden = false;
+    document.body.classList.add('has-cookie');
+    requestAnimationFrame(function () { requestAnimationFrame(function () { cookieBar.classList.add('show'); }); });
+  }
+  function hideCookie() {
+    cookieBar.classList.remove('show');
+    document.body.classList.remove('has-cookie');
+    setTimeout(function () { cookieBar.hidden = true; }, reduce ? 0 : 450);
+  }
+  $$('[data-cookie]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var v = btn.getAttribute('data-cookie');
+      store.set('so_consent', v);
+      hideCookie();
+      if (v === 'all') loadMap();
+    });
+  });
+
+  /* ---------- выбор города ---------- */
+  var cityDlg = $('#cityDlg');
+  var cityBtn = $('#cityBtn');
+  if (cityDlg && typeof cityDlg.showModal === 'function') {
+    if (cityBtn) cityBtn.addEventListener('click', function () { cityDlg.showModal(); });
+    $$('[data-city]', cityDlg).forEach(function (el) {
+      el.addEventListener('click', function () {
+        store.set('so_city', el.getAttribute('data-city'));
+        cityDlg.close();
+      });
+    });
+    cityDlg.addEventListener('click', function (e) { if (e.target === cityDlg) cityDlg.close(); });
+    cityDlg.addEventListener('close', function () {
+      store.set('so_city_seen', '1');
+      setTimeout(showCookie, 300);
+    });
+    if (!store.get('so_city_seen')) {
+      setTimeout(function () { if (!cityDlg.open) cityDlg.showModal(); }, 700);
+    } else {
+      setTimeout(showCookie, 900);
+    }
+  } else {
+    setTimeout(showCookie, 900);
+  }
+
   /* ---------- форма → WhatsApp ---------- */
   var form = $('#lead');
   if (form) {

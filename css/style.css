@@ -426,3 +426,93 @@ h1,h2,h3{font-family:var(--head);line-height:1.1;letter-spacing:-.02em;font-weig
 .foot-nav{display:flex;flex-wrap:wrap;gap:8px 22px;max-width:520px}
 .foot-nav a:hover{color:var(--y)}
 .foot-copy{flex-basis:100%;border-top:1px solid var(--line-d);padding-top:18px;margin-top:6px;font-size:.85rem}
+
+/* ==========================================================
+   Оптимизация и новые блоки: WebP, Speaking Club, ролик, города
+   ========================================================== */
+picture{display:contents}
+
+/* WebP-фон для блока «1000+» (JPG остаётся запасным) */
+@supports (background-image:image-set(url("a.webp") type("image/webp"))){
+  .story{background-image:
+    linear-gradient(180deg,rgba(17,18,20,.72),rgba(17,18,20,.9)),
+    image-set(url("../assets/img/sign.webp") type("image/webp"),url("../assets/img/sign.jpg") type("image/jpeg"))}
+}
+
+/* Speaking Club */
+.club{position:relative;overflow:hidden;display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center;background:var(--ink);color:#fff;border-radius:32px;padding:clamp(30px,5vw,60px)}
+.club::before{content:"";position:absolute;right:-90px;top:-90px;width:320px;height:320px;border-radius:50%;background:rgba(255,180,0,.14)}
+.club>*{position:relative}
+.club h2{font-size:clamp(1.8rem,3.8vw,2.8rem);margin-bottom:16px}
+.club p{color:#c9ccd3;max-width:54ch;margin-bottom:14px}
+.club .club-note{font-size:.92rem;color:var(--muted-d);margin-bottom:26px}
+.club-badge{justify-self:center;width:210px;height:210px;border-radius:50%;background:var(--y);color:var(--black);display:grid;place-content:center;text-align:center;transform:rotate(-8deg);box-shadow:0 24px 50px rgba(255,180,0,.35)}
+.club-badge span{font-size:3rem;line-height:1}
+.club-badge b{font-family:var(--head);font-weight:900;font-size:1.5rem;line-height:1.05;text-transform:uppercase;margin-top:8px}
+@media(max-width:900px){.club{grid-template-columns:1fr}.club-badge{width:150px;height:150px;justify-self:start}.club-badge span{font-size:2.2rem}.club-badge b{font-size:1.05rem}}
+
+/* ролик */
+.reel{max-width:340px;width:100%;margin-inline:auto;border-radius:30px;overflow:hidden;background:#000;box-shadow:0 30px 60px rgba(17,18,20,.28);aspect-ratio:9/16;border:6px solid var(--ink)}
+.reel video{width:100%;height:100%;object-fit:cover;display:block}
+.reel-txt h2{font-size:clamp(1.9rem,4vw,3rem);margin-bottom:16px}
+.reel-txt>p{color:var(--muted);font-size:1.08rem;max-width:52ch}
+@media(max-width:900px){.reel{max-width:300px}}
+
+/* вход в школу */
+.find-photo img{width:100%;border-radius:var(--r);box-shadow:var(--shadow);aspect-ratio:720/512;object-fit:cover}
+.find-txt h2{font-size:clamp(1.9rem,4vw,3rem);margin-bottom:16px}
+.find-txt>p{color:var(--muted);font-size:1.08rem;max-width:52ch}
+
+/* города */
+.cities{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.city{display:flex;flex-direction:column;gap:4px;padding:24px;border-radius:var(--r);background:var(--graphite);border:1px solid var(--line-d);transition:transform .3s var(--ease),border-color .3s,background .3s}
+.city:hover{transform:translateY(-5px);border-color:var(--y)}
+.city small{font-family:var(--head);font-weight:700;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-d)}
+.city b{font-family:var(--head);font-weight:800;font-size:1.5rem}
+.city span{color:var(--y);font-weight:700;font-size:.92rem;overflow-wrap:anywhere}
+.city-here{background:var(--y);border-color:var(--y);color:var(--black)}
+.city-here small{color:rgba(17,18,20,.7)}
+.city-here span{color:var(--black)}
+
+/* ==========================================================
+   Выбор города, плашка cookie, карта по согласию
+   ========================================================== */
+.city-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1.5px solid rgba(255,255,255,.28);color:#fff;font-family:var(--head);font-weight:700;font-size:.9rem;transition:border-color .2s,color .2s,background .2s}
+.city-btn:hover{border-color:var(--y);color:var(--y)}
+.city-btn i{font-style:normal;font-size:.7rem;opacity:.8}
+
+.citydlg{border:1px solid var(--line-d);background:var(--ink);color:#fff;border-radius:28px;padding:clamp(26px,4vw,38px);width:min(94vw,540px);max-height:92vh;margin:auto;overflow:auto}
+.citydlg::backdrop{background:rgba(10,10,11,.8);backdrop-filter:blur(6px)}
+.citydlg[open]{animation:pop .4s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.citydlg form{position:absolute;top:14px;right:14px}
+.dlg-x{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:1.5rem;line-height:1;transition:background .2s,color .2s}
+.dlg-x:hover{background:var(--y);color:var(--black)}
+.dlg-k{font-family:var(--head);font-weight:700;font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--y);margin-bottom:10px}
+.citydlg h2{font-size:clamp(1.6rem,3.4vw,2.1rem);margin-bottom:12px}
+.dlg-sub{color:var(--muted-d);font-size:.97rem}
+.dlg-list{display:grid;gap:10px;margin-top:24px}
+.dlg-city{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:16px 20px;border-radius:16px;background:var(--graphite);border:1px solid var(--line-d);font-family:var(--head);font-weight:800;font-size:1.1rem;color:#fff;text-align:left;transition:transform .2s var(--ease),border-color .2s}
+.dlg-city small{font-family:var(--body);font-weight:600;font-size:.82rem;color:var(--muted-d);text-align:right}
+.dlg-city:hover{border-color:var(--y);transform:translateX(4px)}
+.dlg-city.is-here{background:var(--y);border-color:var(--y);color:var(--black)}
+.dlg-city.is-here small{color:rgba(17,18,20,.72)}
+
+.cookie{position:fixed;left:20px;bottom:20px;z-index:95;width:min(540px,calc(100% - 40px));background:#fff;color:var(--text);border:1px solid var(--line);border-radius:22px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:start;box-shadow:0 24px 60px rgba(17,18,20,.3);opacity:0;transform:translateY(30px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.cookie.show{opacity:1;transform:none}
+.cookie-ic{font-size:2.5rem;line-height:1;display:inline-block;animation:wobble 3.2s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(0)}50%{transform:rotate(-14deg) scale(1.08)}}
+.cookie b{font-family:var(--head);font-size:1.05rem}
+.cookie p{font-size:.88rem;color:var(--muted);margin:4px 0 6px;line-height:1.5}
+.cookie-btns{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.cookie-btns .btn{padding:11px 20px;font-size:.88rem}
+@media(max-width:640px){
+  .cookie{left:12px;bottom:12px;width:calc(100% - 24px);padding:18px}
+  .has-cookie .fab{opacity:0;pointer-events:none}
+}
+
+.map-ph{display:grid;place-content:center;justify-items:center;gap:16px;text-align:center;padding:24px;height:260px;background:var(--graphite);color:var(--muted-d);filter:none}
+.map-ph p{max-width:38ch;font-size:.93rem}
+
+/* пропорции фото без искажения из-за атрибута height */
+.find-photo img,.practice-photo img{height:auto}
