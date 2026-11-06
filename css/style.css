@@ -718,3 +718,4 @@ html.has-loader{animation:ldHtml .01s 6s forwards}
 .foot-made span{font-family:var(--head);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#fff}
 .foot-made a{color:var(--y);font-weight:700}
 .foot-made a:hover{text-decoration:underline}
+.foot-made{display:flex;flex-direction:column;align-items:center;gap:4px}
