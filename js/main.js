@@ -38,14 +38,14 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ---------- логотип: по клику только анимация переключателя ---------- */
-  $$('a.logo').forEach(function (logo) {
+  /* ---------- верхний логотип: по клику только анимация переключателя ---------- */
+  $$('.site-header a.logo').forEach(function (logo) {
     logo.addEventListener('click', function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       e.preventDefault();
       if (logo.classList.contains('flip')) return;
       logo.classList.add('flip');
-      setTimeout(function () { logo.classList.remove('flip'); }, 1000);
+      setTimeout(function () { logo.classList.remove('flip'); }, 1250);
     });
   });
 
