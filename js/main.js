@@ -38,14 +38,23 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ---------- верхний логотип: по клику только анимация переключателя ---------- */
+  /* ---------- верхний логотип: щелчок переключателя, затем переход на главную ---------- */
   $$('.site-header a.logo').forEach(function (logo) {
     logo.addEventListener('click', function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       e.preventDefault();
       if (logo.classList.contains('flip')) return;
       logo.classList.add('flip');
-      setTimeout(function () { logo.classList.remove('flip'); }, 1250);
+      setTimeout(function () {
+        logo.classList.remove('flip');
+        var p = location.pathname;
+        var onHome = /\/(index\.html)?$/.test(p) && !/\/(about|courses|trial|test|reviews|contacts)\/?$/.test(p);
+        if (onHome) {
+          window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+        } else {
+          location.href = logo.getAttribute('href');
+        }
+      }, 900);
     });
   });
 
