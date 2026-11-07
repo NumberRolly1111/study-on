@@ -724,3 +724,30 @@ html.has-loader{animation:ldHtml .01s 6s forwards}
 a.logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
 a.logo.flip .sw i{animation:logoFlip 1s cubic-bezier(.4,0,.2,1)}
 @keyframes logoFlip{0%{right:.1em}35%,60%{right:calc(100% - .56em)}100%{right:.1em}}
+
+/* ==========================================================
+   Рабочие тетради: объёмные книжки (корешок, срез страниц, блик, эмблема)
+   ========================================================== */
+.book{width:160px;border-radius:4px 9px 9px 4px;background:linear-gradient(160deg,#17181a,#0a0a0b);
+  transform:perspective(900px) rotateY(-24deg) rotateX(3deg) rotate(-2deg);transform-origin:50% 60%;
+  box-shadow:3px 3px 0 #f1eee4,5px 5px 0 #d9d4c5,7px 7px 0 #bfb9a6,-1px 0 0 rgba(255,255,255,.08) inset,
+             16px 26px 34px rgba(0,0,0,.5);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.level:hover .book{transform:perspective(900px) rotateY(-9deg) rotateX(2deg) translateY(-8px) scale(1.03)}
+.book::before{width:16px;background:
+  linear-gradient(90deg,rgba(0,0,0,.5) 0 2px,rgba(255,255,255,.28) 2px 4px,rgba(0,0,0,.28) 4px 6px,rgba(255,255,255,.1) 6px 9px,transparent 9px),
+  linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.2))}
+.book::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(112deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.05) 28%,transparent 42%,transparent 72%,rgba(0,0,0,.28) 100%)}
+.book-top{padding:13px 12px 14px 24px;background:linear-gradient(180deg,#ffbd1f,#ffb000)}
+.book-top span{letter-spacing:.16em}
+.book-top b{font-size:1rem}
+.book-body{position:relative;padding:12px 14px 12px 24px}
+.book-body::before{content:"";position:absolute;right:14px;top:14px;width:30px;height:16px;border:3px solid var(--y);border-radius:99px;
+  background:radial-gradient(circle at 72% 50%,var(--y) 0 3.5px,transparent 4px)}
+.book-body em{font-size:.72rem;letter-spacing:.06em;line-height:1.2}
+.book-body i{font-size:3.2rem;color:rgba(255,255,255,.1)}
+.book-ghost{background:rgba(255,255,255,.03);box-shadow:none;border:2px dashed rgba(255,255,255,.28)}
+.book-ghost::after,.book-ghost .book-body::before{display:none}
+.book-ghost::before{width:12px}
+@media(max-width:560px){.book{width:140px}}
