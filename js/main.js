@@ -162,7 +162,7 @@
     counters.forEach(function (c) { co.observe(c); });
   }
 
-  /* ---------- тест уровня: A1 → C1, чем дальше, тем сложнее ---------- */
+  /* ---------- тест уровня: A1 → A2 → B1, чем дальше, тем сложнее ---------- */
   if ($('#quiz')) {
     /* формат: [вопрос, правильный ответ, неверные варианты] */
     var TIERS = [
@@ -171,14 +171,17 @@
         ['___ you like coffee?', 'Do', ['Does', 'Are', 'Is']],
         ['There ___ two books on the table.', 'are', ['is', 'be', 'am']],
         ['My brother ___ in a bank.', 'works', ['work', 'working', 'is work']],
-        ['This is my sister. ___ name is Aigerim.', 'Her', ['She', 'Hers', 'He']]
+        ['This is my sister. ___ name is Aigerim.', 'Her', ['She', 'Hers', 'He']],
+        ['I ___ from Kazakhstan.', 'am', ['is', 'are', 'be']]
       ] },
       { id: 'A2', name: 'Elementary', qs: [
         ['Yesterday we ___ to the cinema.', 'went', ['go', 'gone', 'going']],
         ['Look! It ___ outside.', 'is raining', ['rains', 'rained', 'rain']],
         ['He is ___ than his brother.', 'taller', ['tall', 'the tallest', 'more tall']],
         ['You ___ smoke here. It is forbidden.', "mustn't", ["don't have to", "needn't", 'may']],
-        ["I haven't seen him ___ Monday.", 'since', ['for', 'from', 'during']]
+        ["I haven't seen him ___ Monday.", 'since', ['for', 'from', 'during']],
+        ['How ___ water do you drink every day?', 'much', ['many', 'long', 'often']],
+        ['We ___ dinner when the phone rang.', 'were having', ['had', 'are having', 'have']]
       ] },
       { id: 'B1', name: 'Intermediate', qs: [
         ['If it rains tomorrow, we ___ at home.', 'will stay', ['stay', 'would stay', 'stayed']],
@@ -186,33 +189,17 @@
         ["I'm not used to ___ up so early.", 'getting', ['get', 'got', 'gets']],
         ['The book ___ by millions of people.', 'has been read', ['has read', 'is reading', 'was reading']],
         ['You look tired. You ___ get more sleep.', 'should', ['must to', 'can to', 'would']],
-        ['She said she ___ come to the party.', "wouldn't", ["won't", "doesn't", 'not']]
-      ] },
-      { id: 'B2', name: 'Upper-Intermediate', qs: [
-        ['If I ___ more free time, I would learn to play the guitar.', 'had', ['have', 'would have', 'will have']],
-        ['By the time we arrived, the movie ___.', 'had already started', ['already started', 'has already started', 'was already starting']],
-        ["I'd rather you ___ smoke in here.", "didn't", ["don't", "won't", "wouldn't"]],
-        ['He denied ___ the window.', 'breaking', ['to break', 'break', 'to have broke']],
-        ['Not only ___ late, but he also forgot the documents.', 'did he come', ['he came', 'he did come', 'came he']],
-        ['I wish I ___ that email yesterday.', "hadn't sent", ["didn't send", "wouldn't send", "haven't sent"]]
-      ] },
-      { id: 'C1', name: 'Advanced', qs: [
-        ['Had I known about the delay, I ___ earlier.', 'would have left', ['would leave', 'will have left', 'had left']],
-        ['The committee insisted that he ___ the report by Friday.', 'submit', ['submits', 'submitted', 'is submitting']],
-        ['She is said ___ the best lawyer in the city.', 'to be', ['being', 'to have being', 'that is']],
-        ['Hardly ___ the room when the phone rang.', 'had he entered', ['he had entered', 'he entered', 'did he enter']],
-        ['It never ___ my mind that he might be lying.', 'crossed', ['came', 'went', 'passed']],
-        ['The company decided to ___ its workforce to cut costs.', 'downsize', ['downgrade', 'downplay', 'downfall']]
+        ['She said she ___ come to the party.', "wouldn't", ["won't", "doesn't", 'not']],
+        ['If I ___ you, I would take that job.', 'were', ['am', 'would be', 'will be']],
+        ['He asked me where I ___.', 'lived', ['live', 'do live', 'am living']]
       ] }
     ];
-    var PASS = 0.7; /* порог уровня: 70% верных (4 из 5, 5 из 6) */
+    var PASS = 0.7; /* порог уровня: 70% верных ответов */
     var LEVELS = {
       A0: { badge: 'A0', name: 'Начинающий (Beginner с нуля)', text: 'Базовые конструкции пока даются с трудом, и это нормально. Лучше начать с Level 1 · Beginner: освоите первые фразы и основу для разговора.', book: 'Level 1 Beginner (с нуля)' },
       A1: { badge: 'A1', name: 'Beginner', text: 'База есть, но простые времена и конструкции нужно закрепить. Вам подойдёт Level 1 · Beginner.', book: 'Level 1 Beginner' },
       A2: { badge: 'A2', name: 'Elementary', text: 'Вы справляетесь с простыми ситуациями. Вам подойдёт Level 2 · Elementary: расширим словарь и научимся поддерживать диалог.', book: 'Level 2 Elementary' },
-      B1: { badge: 'B1', name: 'Intermediate', text: 'Уверенная база: вы можете объясниться в большинстве ситуаций. Подберём группу для продолжающих, чтобы говорить свободнее.', book: 'Intermediate' },
-      B2: { badge: 'B2', name: 'Upper-Intermediate', text: 'Сильный уровень. Подберём группу или Speaking Club, где будет много практики речи на высоком уровне.', book: 'Upper-Intermediate' },
-      C1: { badge: 'C1', name: 'Advanced', text: 'Очень высокий уровень, вы уверенно владеете сложной грамматикой. Подойдёт Speaking Club с носителями и разговорная практика.', book: 'Advanced / Speaking Club' }
+      B1: { badge: 'B1', name: 'Intermediate', text: 'Уверенная база: вы можете объясниться в большинстве ситуаций. Подберём группу для продолжающих, чтобы говорить свободнее.', book: 'Intermediate' }
     };
 
     var shuffle = function (arr) {
