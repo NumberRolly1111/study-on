@@ -58,7 +58,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.1;letter-spacing:-.02em;font-weig
 .logo{display:inline-flex;align-items:center;font-family:var(--head);font-weight:800;font-size:1.45rem;letter-spacing:-.01em;color:#fff;line-height:1}
 .logo .sw{position:relative;display:inline-block;width:1.7em;height:.86em;margin:0 .06em;border:.17em solid var(--y);border-radius:999px;flex:none}
 .logo .sw i{position:absolute;top:50%;right:.1em;width:.46em;height:.46em;border-radius:50%;background:var(--y);transform:translateY(-50%);transition:right .5s var(--ease)}
-.logo:hover .sw i{right:calc(100% - .56em)}
+@media(hover:hover){.logo:hover .sw i{right:calc(100% - .56em)}}
 .logo-sm{font-size:1.15rem}
 
 /* ---------- header ---------- */
@@ -719,3 +719,8 @@ html.has-loader{animation:ldHtml .01s 6s forwards}
 .foot-made a{color:var(--y);font-weight:700}
 .foot-made a:hover{text-decoration:underline}
 .foot-made{display:flex;flex-direction:column;align-items:center;gap:4px}
+
+/* клик по логотипу: только анимация переключателя, без перехода */
+a.logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
+a.logo.flip .sw i{animation:logoFlip 1s cubic-bezier(.4,0,.2,1)}
+@keyframes logoFlip{0%{right:.1em}35%,60%{right:calc(100% - .56em)}100%{right:.1em}}
