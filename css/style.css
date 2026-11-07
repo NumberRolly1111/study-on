@@ -721,8 +721,8 @@ html.has-loader{animation:ldHtml .01s 6s forwards}
 
 /* клик по логотипу: только анимация переключателя, без перехода */
 /* верхний логотип: переключатель щёлкает только по нажатию */
-.site-header a.logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
-.site-header a.logo.flip .sw i{animation:logoFlip .9s both}
+.site-header a.logo,.site-footer a.logo{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.site-header a.logo.flip .sw i,.site-footer a.logo.flip .sw i{animation:logoFlip .9s both}
 @keyframes logoFlip{
   0%{transform:translate(0,-50%);animation-timing-function:cubic-bezier(.5,0,.2,1)}
   35%,60%{transform:translate(-.7em,-50%);animation-timing-function:cubic-bezier(.5,0,.2,1)}

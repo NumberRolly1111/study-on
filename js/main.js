@@ -39,7 +39,7 @@
   onScroll();
 
   /* ---------- верхний логотип: щелчок переключателя, затем переход на главную ---------- */
-  $$('.site-header a.logo').forEach(function (logo) {
+  $$('.site-header a.logo, .site-footer a.logo').forEach(function (logo) {
     logo.addEventListener('click', function (e) {
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       e.preventDefault();
