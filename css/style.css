@@ -845,3 +845,12 @@ html.has-loader{animation:ldHtml .01s 6s forwards}
   .bento .shot:first-child img{object-position:50% 40%}
   .bento .shot{aspect-ratio:3/4}
 }
+
+/* ---------- мобильный герой: фото ровно по ширине, жёлтая подложка тенью ---------- */
+@media(max-width:940px){
+  .hero-visual{padding:0 10px 34px 0}
+  .hero-visual::before{display:none}
+  .photo-frame{border-radius:26px;box-shadow:10px 10px 0 var(--y)}
+  .photo-frame img{object-position:60% 30%}
+  .hero-chips{padding:0 0 0 12px}
+}
